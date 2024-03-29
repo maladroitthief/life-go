@@ -15,6 +15,7 @@ var (
 	duration int
 	height   int
 	width    int
+	filename string
 )
 
 func main() {
@@ -28,10 +29,16 @@ func main() {
 	flag.IntVar(&duration, "duration", -1, "game of life duration")
 	flag.IntVar(&height, "height", 64, "height of the game")
 	flag.IntVar(&width, "width", 64, "width of the game")
+	flag.StringVar(&filename, "file", "", "input file")
 
 	flag.Parse()
 
-	game := life.GenerateRound(height, width)
+	var game *life.Game
+	if filename != "" {
+		game = life.LoadRound(filename)
+	} else {
+		game = life.GenerateRound(height, width)
+	}
 
 	for i := 0; i != duration; i++ {
 		game.Update()
